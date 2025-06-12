@@ -16,8 +16,8 @@ export class HackerNewsClient {
     return data as T;
   }
 
-  async getItem(id: number): Promise<HNItem> {
-    return this.makeRequest<HNItem>(`/item/${id}.json`);
+  async getItem(id: number): Promise<HNItem | null> {
+    return this.makeRequest<HNItem | null>(`/item/${id}.json`);
   }
 
   async getTopStories(): Promise<number[]> {
