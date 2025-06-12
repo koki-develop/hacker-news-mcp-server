@@ -9,13 +9,18 @@
     "lint": "biome check .",
     "format": "biome check --write .",
     "typecheck": "tsc --noEmit",
-    "build": "bun run ./scripts/build.ts"
+    "build": "bun run ./scripts/build.ts",
+    "preinspector": "bun run build",
+    "inspector": "mcp-inspector bun run ./dist/index.js"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.12.1"
+    "@modelcontextprotocol/sdk": "1.12.1",
+    "p-limit": "6.2.0",
+    "zod": "3.25.63"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@modelcontextprotocol/inspector": "0.14.0",
     "@types/bun": "1.2.16",
     "husky": "9.1.7",
     "lint-staged": "16.1.0",
