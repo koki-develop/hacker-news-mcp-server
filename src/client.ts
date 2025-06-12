@@ -1,71 +1,23 @@
-import type { HNError, HNItem } from "./types.js";
-
-export interface HackerNewsClientConfig {
-  baseUrl?: string;
-  timeout?: number;
-}
+import type { HNItem } from "./types";
 
 export class HackerNewsClient {
-  private readonly baseUrl: string;
-  private readonly timeout: number;
-
-  constructor(config: HackerNewsClientConfig = {}) {
-    this.baseUrl = config.baseUrl ?? "https://hacker-news.firebaseio.com/v0";
-    this.timeout = config.timeout ?? 10000;
-  }
-
-  private async fetchWithTimeout(url: string): Promise<Response> {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), this.timeout);
-
-    try {
-      const response = await fetch(url, {
-        signal: controller.signal,
-      });
-      clearTimeout(timeoutId);
-      return response;
-    } catch (error) {
-      clearTimeout(timeoutId);
-      if (error instanceof Error && error.name === "AbortError") {
-        throw new Error(`Request timeout after ${this.timeout}ms`);
-      }
-      throw error;
-    }
-  }
+  private readonly baseUrl = "https://hacker-news.firebaseio.com/v0";
 
   private async makeRequest<T>(endpoint: string): Promise<T> {
-    const url = `${this.baseUrl}${endpoint}`;
+    const url = new URL(endpoint, this.baseUrl);
+    const response = await fetch(url);
 
-    try {
-      const response = await this.fetchWithTimeout(url);
-
-      if (!response.ok) {
-        const errorData: HNError = {
-          message: `HTTP ${response.status}: ${response.statusText}`,
-          status: response.status,
-          code: response.status,
-        };
-        throw new Error(errorData.message);
-      }
-
-      const data = await response.json();
-      return data as T;
-    } catch (error) {
-      if (error instanceof Error) {
-        throw error;
-      }
-      throw new Error("Unknown error occurred");
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText);
     }
+
+    const data = await response.json();
+    return data as T;
   }
 
-  async getItem(id: number): Promise<HNItem | null> {
-    try {
-      const item = await this.makeRequest<HNItem | null>(`/item/${id}.json`);
-      return item;
-    } catch (error) {
-      console.error(`Failed to fetch item ${id}:`, error);
-      return null;
-    }
+  async getItem(id: number): Promise<HNItem> {
+    return this.makeRequest<HNItem>(`/item/${id}.json`);
   }
 
   async getTopStories(): Promise<number[]> {

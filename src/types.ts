@@ -17,22 +17,3 @@ export interface HNItem {
   deleted?: boolean;
   dead?: boolean;
 }
-
-export interface HNUser {
-  id: string;
-  created: number;
-  karma: number;
-  about?: string;
-  submitted?: number[];
-}
-
-export interface HNUpdates {
-  items: number[];
-  profiles: string[];
-}
-
-export interface HNError {
-  message: string;
-  code?: string | number;
-  status?: number;
-}
