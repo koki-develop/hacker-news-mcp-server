@@ -16,3 +16,6 @@ CLAUDE.md
 # Docker files
 Dockerfile
 .dockerignore
+
+# Git submodules
+HackerNews
