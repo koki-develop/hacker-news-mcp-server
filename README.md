@@ -48,7 +48,7 @@ Retrieve a Hacker News item (story, comment, job, poll, or poll option) by its I
 
 | Parameter | Type   | Required | Description                    |
 |-----------|--------|----------|--------------------------------|
-| `id`      | number | Yes      | The ID of the item to retrieve |
+| **`id`**  | number | **Yes**  | The ID of the item to retrieve |
 
 ### Stories
 
