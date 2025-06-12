@@ -1,19 +1,22 @@
 {
-  "name": "hacker-news-mcp-server",
-  "module": "index.ts",
-  "type": "module",
-  "private": true,
-  "scripts": {
-    "prepare": "husky || true",
-    "lint": "biome check .",
-    "format": "biome check --write .",
-    "typecheck": "tsc --noEmit"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@types/bun": "1.2.16",
-    "husky": "9.1.7",
-    "lint-staged": "16.1.0",
-    "typescript": "5.8.3"
-  }
+	"name": "hacker-news-mcp-server",
+	"module": "index.ts",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"prepare": "husky || true",
+		"lint": "biome check .",
+		"format": "biome check --write .",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "1.12.1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@types/bun": "1.2.16",
+		"husky": "9.1.7",
+		"lint-staged": "16.1.0",
+		"typescript": "5.8.3"
+	}
 }
