@@ -1,0 +1,18 @@
+# Build outputs (will be built in container)
+node_modules
+dist
+
+# Development files
+.DS_Store
+
+# Development tools
+mise.toml
+.husky
+
+# Documentation
+README.md
+CLAUDE.md
+
+# Docker files
+Dockerfile
+.dockerignore
