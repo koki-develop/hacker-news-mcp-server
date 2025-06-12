@@ -1,9 +1,25 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import pLimit from "p-limit";
 import { z } from "zod";
 import { HackerNewsClient } from "./client.js";
 import type { HNItem } from "./types.js";
 
 const client = new HackerNewsClient();
+const limit = pLimit(10); // Limit concurrent requests to 10
+
+async function fetchStories(
+  fetchIds: () => Promise<number[]>,
+  maxStories: number,
+): Promise<HNItem[]> {
+  const storyIds = await fetchIds();
+  const limitedIds = storyIds.slice(0, maxStories);
+
+  const stories: (HNItem | null)[] = await Promise.all(
+    limitedIds.map((id) => limit(() => client.getItem(id))),
+  );
+
+  return stories.filter((story): story is HNItem => story !== null);
+}
 
 export function registerTools(server: McpServer) {
   // hn_get_item - Get item by ID (story, comment, job, poll)
@@ -49,19 +65,12 @@ export function registerTools(server: McpServer) {
       description: "Get the current top stories on Hacker News",
     },
     async ({ limit = 30 }) => {
-      const storyIds = await client.getTopStories();
-      const limitedIds = storyIds.slice(0, limit);
-      const stories: (HNItem | null)[] = await Promise.all(
-        limitedIds.map((id) => client.getItem(id)),
-      );
-      const validStories = stories.filter(
-        (story): story is HNItem => story !== null,
-      );
+      const stories = await fetchStories(() => client.getTopStories(), limit);
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(validStories, null, 2),
+            text: JSON.stringify(stories, null, 2),
           },
         ],
       };
@@ -84,19 +93,12 @@ export function registerTools(server: McpServer) {
       description: "Get the newest stories on Hacker News",
     },
     async ({ limit = 30 }) => {
-      const storyIds = await client.getNewStories();
-      const limitedIds = storyIds.slice(0, limit);
-      const stories: (HNItem | null)[] = await Promise.all(
-        limitedIds.map((id) => client.getItem(id)),
-      );
-      const validStories = stories.filter(
-        (story): story is HNItem => story !== null,
-      );
+      const stories = await fetchStories(() => client.getNewStories(), limit);
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(validStories, null, 2),
+            text: JSON.stringify(stories, null, 2),
           },
         ],
       };
@@ -119,19 +121,12 @@ export function registerTools(server: McpServer) {
       description: "Get the best stories on Hacker News",
     },
     async ({ limit = 30 }) => {
-      const storyIds = await client.getBestStories();
-      const limitedIds = storyIds.slice(0, limit);
-      const stories: (HNItem | null)[] = await Promise.all(
-        limitedIds.map((id) => client.getItem(id)),
-      );
-      const validStories = stories.filter(
-        (story): story is HNItem => story !== null,
-      );
+      const stories = await fetchStories(() => client.getBestStories(), limit);
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(validStories, null, 2),
+            text: JSON.stringify(stories, null, 2),
           },
         ],
       };
@@ -154,19 +149,12 @@ export function registerTools(server: McpServer) {
       description: "Get the latest Ask HN stories",
     },
     async ({ limit = 30 }) => {
-      const storyIds = await client.getAskStories();
-      const limitedIds = storyIds.slice(0, limit);
-      const stories: (HNItem | null)[] = await Promise.all(
-        limitedIds.map((id) => client.getItem(id)),
-      );
-      const validStories = stories.filter(
-        (story): story is HNItem => story !== null,
-      );
+      const stories = await fetchStories(() => client.getAskStories(), limit);
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(validStories, null, 2),
+            text: JSON.stringify(stories, null, 2),
           },
         ],
       };
@@ -189,19 +177,12 @@ export function registerTools(server: McpServer) {
       description: "Get the latest Show HN stories",
     },
     async ({ limit = 30 }) => {
-      const storyIds = await client.getShowStories();
-      const limitedIds = storyIds.slice(0, limit);
-      const stories: (HNItem | null)[] = await Promise.all(
-        limitedIds.map((id) => client.getItem(id)),
-      );
-      const validStories = stories.filter(
-        (story): story is HNItem => story !== null,
-      );
+      const stories = await fetchStories(() => client.getShowStories(), limit);
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(validStories, null, 2),
+            text: JSON.stringify(stories, null, 2),
           },
         ],
       };
@@ -224,19 +205,12 @@ export function registerTools(server: McpServer) {
       description: "Get the latest job postings",
     },
     async ({ limit = 30 }) => {
-      const storyIds = await client.getJobStories();
-      const limitedIds = storyIds.slice(0, limit);
-      const stories: (HNItem | null)[] = await Promise.all(
-        limitedIds.map((id) => client.getItem(id)),
-      );
-      const validStories = stories.filter(
-        (story): story is HNItem => story !== null,
-      );
+      const stories = await fetchStories(() => client.getJobStories(), limit);
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(validStories, null, 2),
+            text: JSON.stringify(stories, null, 2),
           },
         ],
       };
