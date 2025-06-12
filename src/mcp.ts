@@ -1,8 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import pLimit from "p-limit";
 import { z } from "zod";
-import { HackerNewsClient } from "./client.js";
-import type { HNItem } from "./types.js";
+import { HackerNewsClient } from "./client";
+import type { HNItem } from "./types";
 
 const client = new HackerNewsClient();
 const limit = pLimit(10); // Limit concurrent requests to 10
