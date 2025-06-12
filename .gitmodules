@@ -1,0 +1,3 @@
+[submodule "HackerNews/API"]
+	path = HackerNews/API
+	url = https://github.com/HackerNews/API.git
