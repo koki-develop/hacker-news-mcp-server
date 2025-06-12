@@ -5,6 +5,7 @@
       "name": "hacker-news-mcp-server",
       "dependencies": {
         "@modelcontextprotocol/sdk": "1.12.1",
+        "zod": "3.25.63",
       },
       "devDependencies": {
         "@biomejs/biome": "1.9.4",
