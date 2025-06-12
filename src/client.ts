@@ -1,7 +1,7 @@
 import type { HNItem } from "./types";
 
 export class HackerNewsClient {
-  private readonly baseUrl = "https://hacker-news.firebaseio.com/v0";
+  private readonly baseUrl = "https://hacker-news.firebaseio.com";
 
   private async makeRequest<T>(endpoint: string): Promise<T> {
     const url = new URL(endpoint, this.baseUrl);
@@ -17,30 +17,30 @@ export class HackerNewsClient {
   }
 
   async getItem(id: number): Promise<HNItem | null> {
-    return this.makeRequest<HNItem | null>(`/item/${id}.json`);
+    return this.makeRequest<HNItem | null>(`/v0/item/${id}.json`);
   }
 
   async getTopStories(): Promise<number[]> {
-    return this.makeRequest<number[]>("/topstories.json");
+    return this.makeRequest<number[]>("/v0/topstories.json");
   }
 
   async getNewStories(): Promise<number[]> {
-    return this.makeRequest<number[]>("/newstories.json");
+    return this.makeRequest<number[]>("/v0/newstories.json");
   }
 
   async getBestStories(): Promise<number[]> {
-    return this.makeRequest<number[]>("/beststories.json");
+    return this.makeRequest<number[]>("/v0/beststories.json");
   }
 
   async getAskStories(): Promise<number[]> {
-    return this.makeRequest<number[]>("/askstories.json");
+    return this.makeRequest<number[]>("/v0/askstories.json");
   }
 
   async getShowStories(): Promise<number[]> {
-    return this.makeRequest<number[]>("/showstories.json");
+    return this.makeRequest<number[]>("/v0/showstories.json");
   }
 
   async getJobStories(): Promise<number[]> {
-    return this.makeRequest<number[]>("/jobstories.json");
+    return this.makeRequest<number[]>("/v0/jobstories.json");
   }
 }
