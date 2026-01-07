@@ -14,7 +14,7 @@
     "inspector": "mcp-inspector bun run ./dist/index.js"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.12.1",
+    "@modelcontextprotocol/sdk": "1.25.2",
     "p-limit": "6.2.0",
     "zod": "3.25.63"
   },
